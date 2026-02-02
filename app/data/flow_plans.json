@@ -1,0 +1,35 @@
+{
+  "plan-001": {
+    "status": "success",
+    "intent": "Route all sensor data to sink",
+    "plan_id": "plan-001",
+    "flows": [
+      {
+        "nodeId": 2,
+        "srcAddr": 2,
+        "dstAddr": 1,
+        "action": 1,
+        "nextHop": 1,
+        "description": "Route from sensor 2 to sink 1"
+      },
+      {
+        "nodeId": 3,
+        "srcAddr": 3,
+        "dstAddr": 1,
+        "action": 1,
+        "nextHop": 1,
+        "description": "Route from sensor 3 to sink 1"
+      },
+      {
+        "nodeId": 4,
+        "srcAddr": 4,
+        "dstAddr": 1,
+        "action": 1,
+        "nextHop": 1,
+        "description": "Route from sensor 4 to sink 1"
+      }
+    ],
+    "summary": "Generated 3 flow rules to route sensor data to sink",
+    "mock": true
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "users": [
+    {"userId": "u1", "name": "nurse-1", "roles": ["nurse"]},
+    {"userId": "u2", "name": "tech-1", "roles": ["tech"]},
+    {"userId": "u3", "name": "admin-1", "roles": ["admin"]}
+  ],
+  "policies": [
+    {"role": "nurse", "allow": ["read_patient","ack_alert"]},
+    {"role": "tech", "allow": ["read_device","maintain_device"]},
+    {"role": "admin", "allow": ["*"]}
+  ]
+}

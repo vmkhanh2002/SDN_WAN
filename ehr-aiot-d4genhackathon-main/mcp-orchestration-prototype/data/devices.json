@@ -1,0 +1,161 @@
+[
+  {
+    "device_id": "esp32-001",
+    "deviceId": "esp32-001",
+    "name": "Corridor Camera",
+    "type": "camera",
+    "device_type": "camera",
+    "status": "active",
+    "ip": "192.168.1.10",
+    "battery": 85,
+    "location": "corridor",
+    "capabilities": ["video_streaming", "temperature_sensing"],
+    "services": [
+      {
+        "name": "camera",
+        "protocol": "HTTP/REST",
+        "details": {
+          "fov": "90 degrees",
+          "detection_area": "corridor",
+          "resolution": "1920x1080",
+          "sampling_frequency": 30
+        }
+      },
+      {
+        "name": "temperature",
+        "protocol": "MQTT",
+        "details": {
+          "range": "10-50 C",
+          "unit": "celsius"
+        }
+      }
+    ]
+  },
+  {
+    "device_id": "esp32-002",
+    "deviceId": "esp32-002",
+    "name": "Room 101 Sensor",
+    "type": "sensor",
+    "device_type": "sensor",
+    "status": "active",
+    "ip": "192.168.1.11",
+    "battery": 92,
+    "location": "room_101",
+    "capabilities": ["temperature_sensing", "humidity_sensing"],
+    "services": [
+      {
+        "name": "temperature",
+        "protocol": "MQTT",
+        "details": {
+          "range": "15-40 C",
+          "unit": "celsius",
+          "accuracy": "±0.5 C"
+        }
+      },
+      {
+        "name": "humidity",
+        "protocol": "MQTT",
+        "details": {
+          "range": "20-80%",
+          "unit": "percent",
+          "accuracy": "±2%"
+        }
+      }
+    ]
+  },
+  {
+    "device_id": "esp32-003",
+    "deviceId": "esp32-003",
+    "name": "Room 102 Sensor",
+    "type": "sensor",
+    "device_type": "sensor",
+    "status": "deep_sleep",
+    "ip": "192.168.1.12",
+    "battery": 15,
+    "location": "room_102",
+    "capabilities": ["temperature_sensing"],
+    "services": [
+      {
+        "name": "temperature",
+        "protocol": "MQTT",
+        "details": {
+          "range": "15-40 C",
+          "unit": "celsius",
+          "accuracy": "±0.5 C"
+        }
+      }
+    ]
+  },
+  {
+    "device_id": "esp32-004",
+    "deviceId": "esp32-004",
+    "name": "Corridor Light Control",
+    "type": "actuator",
+    "device_type": "actuator",
+    "status": "idle",
+    "ip": "192.168.1.13",
+    "battery": 78,
+    "location": "corridor",
+    "capabilities": ["light_control"],
+    "services": [
+      {
+        "name": "control",
+        "protocol": "HTTP/REST",
+        "details": {
+          "actions": ["on", "off", "dim"]
+        }
+      }
+    ]
+  },
+  {
+    "device_id": "esp32-005",
+    "deviceId": "esp32-005",
+    "name": "Storage Room Motion Sensor",
+    "type": "sensor",
+    "device_type": "sensor",
+    "status": "sleep",
+    "ip": "192.168.1.14",
+    "battery": 45,
+    "location": "storage",
+    "capabilities": ["motion_detection"],
+    "services": [
+      {
+        "name": "motion_detection",
+        "protocol": "MQTT",
+        "details": {
+          "sensitivity": "high",
+          "range": "5 meters"
+        }
+      }
+    ]
+  },
+  {
+    "device_id": "esp32-006",
+    "deviceId": "esp32-006",
+    "name": "Nursing Station Display",
+    "type": "display",
+    "device_type": "display",
+    "status": "active",
+    "ip": "192.168.1.15",
+    "battery": 88,
+    "location": "nursing_station",
+    "capabilities": ["display_control", "status_monitoring"],
+    "services": [
+      {
+        "name": "display_control",
+        "protocol": "HTTP/REST",
+        "details": {
+          "resolution": "1920x1080",
+          "refresh_rate": "60 Hz"
+        }
+      },
+      {
+        "name": "status",
+        "protocol": "MQTT",
+        "details": {
+          "online": true
+        }
+      }
+    ]
+  }
+]

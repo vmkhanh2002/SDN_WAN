@@ -1,0 +1,231 @@
+{
+  "energy_models": {
+    "devices": {
+      "esp32_wroom": {
+        "type": "microcontroller",
+        "active_mode_mw": 80,
+        "idle_mode_mw": 20,
+        "sleep_mode_mw": 0.15,
+        "deep_sleep_mode_mw": 0.01,
+        "notes": "ESP32 WROOM typical power consumption"
+      },
+      "esp32_s3": {
+        "type": "microcontroller",
+        "active_mode_mw": 100,
+        "idle_mode_mw": 25,
+        "sleep_mode_mw": 0.20,
+        "deep_sleep_mode_mw": 0.02,
+        "notes": "ESP32-S3 with higher performance"
+      },
+      "esp32_c6": {
+        "type": "microcontroller",
+        "active_mode_mw": 60,
+        "idle_mode_mw": 15,
+        "sleep_mode_mw": 0.10,
+        "deep_sleep_mode_mw": 0.005,
+        "notes": "ESP32-C6 optimized for low power"
+      }
+    },
+    "sensors": {
+      "temperature_sensor": {
+        "sampling_mode": "on_demand",
+        "power_consumption_per_reading_mw": 2,
+        "startup_delay_ms": 100,
+        "notes": "i2c temperature sensor (DHT22, BME280)"
+      },
+      "humidity_sensor": {
+        "sampling_mode": "periodic",
+        "power_consumption_per_reading_mw": 2,
+        "periodic_interval_seconds": 5,
+        "notes": "Integrated with temperature sensor"
+      },
+      "motion_sensor": {
+        "sampling_mode": "event_driven",
+        "power_consumption_sensing_mw": 1,
+        "power_consumption_per_event_mw": 5,
+        "notes": "PIR motion detection"
+      },
+      "camera_sensor": {
+        "sampling_mode": "continuous_streaming",
+        "base_power_mw": 500,
+        "per_mbps_overhead_mw": 50,
+        "notes": "OV2640 camera module"
+      },
+      "light_sensor": {
+        "sampling_mode": "periodic",
+        "power_consumption_mw": 1,
+        "periodic_interval_seconds": 10,
+        "notes": "BH1750 light sensor"
+      }
+    },
+    "actuators": {
+      "led_light": {
+        "off_mw": 0,
+        "low_brightness_mw": 100,
+        "medium_brightness_mw": 300,
+        "high_brightness_mw": 500,
+        "notes": "RGB LED strip"
+      },
+      "relay": {
+        "inactive_mw": 5,
+        "active_mw": 200,
+        "notes": "5V relay for HVAC control"
+      },
+      "motor": {
+        "off_mw": 0,
+        "low_speed_mw": 300,
+        "medium_speed_mw": 600,
+        "high_speed_mw": 1000,
+        "notes": "Small DC motor"
+      }
+    }
+  },
+  "transmission_models": {
+    "protocols": {
+      "wifi": {
+        "active_tx_mw": 150,
+        "active_rx_mw": 100,
+        "idle_mw": 10,
+        "sleep_mw": 0.5,
+        "range_meters": 100,
+        "max_bandwidth_mbps": 150,
+        "latency_ms": 5,
+        "packet_loss_percent": 1,
+        "notes": "IEEE 802.11 b/g/n"
+      },
+      "mqtt": {
+        "base_protocol": "wifi",
+        "overhead_bytes_per_message": 20,
+        "typical_message_size_bytes": 50,
+        "publish_overhead_ms": 10,
+        "notes": "MQTT over WiFi"
+      },
+      "http_rest": {
+        "base_protocol": "wifi",
+        "request_size_bytes": 500,
+        "response_size_bytes": 1000,
+        "latency_ms": 50,
+        "notes": "HTTP/REST over WiFi"
+      },
+      "ble": {
+        "active_tx_mw": 50,
+        "active_rx_mw": 40,
+        "idle_mw": 1,
+        "sleep_mw": 0.001,
+        "range_meters": 50,
+        "max_bandwidth_kbps": 1000,
+        "latency_ms": 20,
+        "packet_loss_percent": 2,
+        "notes": "Bluetooth Low Energy"
+      },
+      "zigbee": {
+        "active_tx_mw": 100,
+        "active_rx_mw": 80,
+        "idle_mw": 5,
+        "sleep_mw": 0.1,
+        "range_meters": 100,
+        "max_bandwidth_kbps": 250,
+        "latency_ms": 15,
+        "packet_loss_percent": 0.5,
+        "notes": "IEEE 802.15.4 ZigBee"
+      },
+      "thread": {
+        "active_tx_mw": 90,
+        "active_rx_mw": 70,
+        "idle_mw": 4,
+        "sleep_mw": 0.05,
+        "range_meters": 100,
+        "max_bandwidth_kbps": 250,
+        "latency_ms": 10,
+        "packet_loss_percent": 0.3,
+        "notes": "Thread mesh networking"
+      }
+    },
+    "scenarios": {
+      "high_precision_sensing": {
+        "description": "Multiple sensors at 60Hz sampling",
+        "bandwidth_requirement_mbps": 2,
+        "energy_per_device_mw": 150,
+        "recommended_protocol": "mqtt",
+        "expected_latency_ms": 50
+      },
+      "corridor_video_streaming": {
+        "description": "1920x1080@30fps H.264 video",
+        "bandwidth_requirement_mbps": 30,
+        "energy_per_device_mw": 800,
+        "recommended_protocol": "http_rest",
+        "expected_latency_ms": 100
+      },
+      "environmental_monitoring": {
+        "description": "Periodic temperature/humidity at 1Hz",
+        "bandwidth_requirement_mbps": 0.1,
+        "energy_per_device_mw": 50,
+        "recommended_protocol": "mqtt",
+        "expected_latency_ms": 5
+      },
+      "low_power_mode": {
+        "description": "Event-driven motion detection",
+        "bandwidth_requirement_mbps": 0.01,
+        "energy_per_device_mw": 10,
+        "recommended_protocol": "zigbee",
+        "expected_latency_ms": 100
+      }
+    }
+  },
+  "optimization_strategies": {
+    "energy": [
+      {
+        "name": "reduce_sampling_frequency",
+        "from_hz": 60,
+        "to_hz": 30,
+        "energy_reduction_percent": 30,
+        "impact": "medium",
+        "use_case": "Environmental monitoring"
+      },
+      {
+        "name": "reduce_resolution",
+        "from_resolution": "1920x1080",
+        "to_resolution": "1440p",
+        "bandwidth_reduction_percent": 40,
+        "energy_reduction_percent": 25,
+        "impact": "medium"
+      },
+      {
+        "name": "progressive_activation",
+        "description": "Activate devices sequentially instead of parallel",
+        "peak_power_reduction_percent": 50,
+        "total_energy_increase_percent": 10,
+        "benefit": "Prevents power supply strain"
+      },
+      {
+        "name": "sleep_inactive_devices",
+        "description": "Put idle devices in sleep mode",
+        "energy_reduction_percent": 95,
+        "recovery_time_ms": 100
+      }
+    ],
+    "transmission": [
+      {
+        "name": "enable_compression",
+        "technology": "H.265 video codec",
+        "from_codec": "H.264",
+        "bandwidth_reduction_percent": 50,
+        "cpu_overhead_percent": 20
+      },
+      {
+        "name": "adaptive_bitrate",
+        "description": "Dynamically adjust video quality based on available bandwidth",
+        "min_bandwidth_mbps": 5,
+        "max_bandwidth_mbps": 30,
+        "adaptation_frequency_seconds": 5
+      },
+      {
+        "name": "data_aggregation",
+        "description": "Batch sensor readings for transmission",
+        "batch_size_readings": 10,
+        "transmission_overhead_reduction_percent": 80,
+        "latency_increase_ms": 500
+      }
+    ]
+  }
+}

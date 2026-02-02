@@ -1,0 +1,45 @@
+{
+    "sensor_nodes": [
+        {
+            "nodeId": 1,
+            "type": "border-router",
+            "location": "Gateway",
+            "battery": 100,
+            "status": "active"
+        },
+        {
+            "nodeId": 2,
+            "type": "sensor",
+            "location": "Corridor A",
+            "battery": 85,
+            "status": "active",
+            "sensors": [
+                "temperature",
+                "humidity"
+            ]
+        },
+        {
+            "nodeId": 3,
+            "type": "sensor",
+            "location": "Corridor B",
+            "battery": 90,
+            "status": "active",
+            "sensors": [
+                "temperature",
+                "light"
+            ]
+        },
+        {
+            "nodeId": 4,
+            "type": "sensor",
+            "location": "Room 101",
+            "battery": 78,
+            "status": "active",
+            "sensors": [
+                "temperature",
+                "humidity",
+                "light"
+            ]
+        }
+    ]
+}

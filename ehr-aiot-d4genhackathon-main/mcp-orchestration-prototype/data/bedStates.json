@@ -1,0 +1,29 @@
+[
+  {
+    "patientId": 1,
+    "bedId": "BED-A101",
+    "pressureSensorKg": 0.8,
+    "pirMotionDetected": true,
+    "bedOccupied": false,
+    "lastUpdated": "2025-03-10T02:14:32Z",
+    "status": "BED_EXIT_DETECTED"
+  },
+  {
+    "patientId": 2,
+    "bedId": "BED-A102",
+    "pressureSensorKg": 62.4,
+    "pirMotionDetected": false,
+    "bedOccupied": true,
+    "lastUpdated": "2025-03-10T02:15:01Z",
+    "status": "NORMAL"
+  },
+  {
+    "patientId": 3,
+    "bedId": "BED-B201",
+    "pressureSensorKg": 4.2,
+    "pirMotionDetected": true,
+    "bedOccupied": false,
+    "lastUpdated": "2025-03-10T02:16:45Z",
+    "status": "POTENTIAL_BED_EXIT"
+  }
+]

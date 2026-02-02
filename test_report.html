@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SDN-WISE Test Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 40px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .timestamp {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-card.total { background: #f0f0f0; }
+        .stat-card.pass { background: #d4edda; color: #155724; }
+        .stat-card.fail { background: #f8d7da; color: #721c24; }
+        .stat-card.skip { background: #fff3cd; color: #856404; }
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .stat-label {
+            font-size: 14px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+        .status {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .status.PASS {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.FAIL {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .status.SKIP {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .details {
+            color: #666;
+            font-size: 13px;
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SDN-WISE Full Stack - Test Report</h1>
+        <div class="timestamp">Generated: 2026-01-30 16:56:41</div>
+        
+        <div class="summary">
+            <div class="stat-card total">
+                <div class="stat-label">Total Tests</div>
+                <div class="stat-number">10</div>
+            </div>
+            <div class="stat-card pass">
+                <div class="stat-label">Passed</div>
+                <div class="stat-number">5</div>
+            </div>
+            <div class="stat-card fail">
+                <div class="stat-label">Failed</div>
+                <div class="stat-number">5</div>
+            </div>
+            <div class="stat-card skip">
+                <div class="stat-label">Skipped</div>
+                <div class="stat-number">0</div>
+            </div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 50.0%">
+                50.0% Pass Rate
+            </div>
+        </div>
+        
+        <h2>Test Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Test Name</th>
+                    <th>Status</th>
+                    <th>Duration</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td>Container Health Check</td>
+                    <td><span class="status PASS">PASS</span></td>
+                    <td>0.058s</td>
+                    <td class="details">All 4 containers running: onos-sdn, mininet-sdn, cooja-simulator, mcp-ia-agent</td>
+                </tr>
+
+                <tr>
+                    <td>MCP Root Endpoint</td>
+                    <td><span class="status PASS">PASS</span></td>
+                    <td>0.039s</td>
+                    <td class="details">Service: SDN-WISE MCP Server</td>
+                </tr>
+
+                <tr>
+                    <td>MCP Health Check</td>
+                    <td><span class="status PASS">PASS</span></td>
+                    <td>0.028s</td>
+                    <td class="details">ONOS: http://172.25.0.2:8181, Agents: True</td>
+                </tr>
+
+                <tr>
+                    <td>ONOS Applications API</td>
+                    <td><span class="status FAIL">FAIL</span></td>
+                    <td>10.001s</td>
+                    <td class="details">HTTPConnectionPool(host='172.25.0.2', port=8181): Max retries exceeded with url: /onos/v1/applications (Caused by ConnectTimeoutError(<HTTPConnection(host='172.25.0.2', port=8181) at 0x27dbdd6dbd0>, 'Connection to 172.25.0.2 timed out. (connect timeout=10)'))</td>
+                </tr>
+
+                <tr>
+                    <td>ONOS Devices API</td>
+                    <td><span class="status FAIL">FAIL</span></td>
+                    <td>10.008s</td>
+                    <td class="details">HTTPConnectionPool(host='172.25.0.2', port=8181): Max retries exceeded with url: /onos/v1/devices (Caused by ConnectTimeoutError(<HTTPConnection(host='172.25.0.2', port=8181) at 0x27dbdd5dcd0>, 'Connection to 172.25.0.2 timed out. (connect timeout=10)'))</td>
+                </tr>
+
+                <tr>
+                    <td>Task: deployment-monitoring</td>
+                    <td><span class="status PASS">PASS</span></td>
+                    <td>0.014s</td>
+                    <td class="details">Action 'status' processed successfully</td>
+                </tr>
+
+                <tr>
+                    <td>Task: network-configuration</td>
+                    <td><span class="status FAIL">FAIL</span></td>
+                    <td>0.030s</td>
+                    <td class="details">Status: 400, Response: {"detail":"Unknown action: status"}</td>
+                </tr>
+
+                <tr>
+                    <td>Task: plan-validation</td>
+                    <td><span class="status FAIL">FAIL</span></td>
+                    <td>0.041s</td>
+                    <td class="details">Status: 400, Response: {"detail":"Plan object required in payload"}</td>
+                </tr>
+
+                <tr>
+                    <td>Task: access-control</td>
+                    <td><span class="status FAIL">FAIL</span></td>
+                    <td>0.029s</td>
+                    <td class="details">Status: 400, Response: {"detail":"Unsupported op"}</td>
+                </tr>
+
+                <tr>
+                    <td>Response Time Performance</td>
+                    <td><span class="status PASS">PASS</span></td>
+                    <td>0.057s</td>
+                    <td class="details">Average: 11.48ms (threshold: 200ms)</td>
+                </tr>
+
+            </tbody>
+        </table>
+        
+        <div class="footer">
+            SDN-WISE Full Stack - Production Readiness Testing<br>
+            Intent-Based Wireless Sensor Network Orchestration
+        </div>
+    </div>
+</body>
+</html>
