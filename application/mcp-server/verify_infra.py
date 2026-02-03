@@ -33,8 +33,8 @@ def verify_infrastructure():
     
     services = [
         ("ONOS Controller", "localhost", 8181, "http://localhost:8181/onos/v1/applications", ("onos", "rocks")),
-        ("MCP Server", "localhost", 8000, "http://localhost:8000/health", None),
-        ("Cooja VNC", "localhost", 5900, None, None)
+        ("MCP Server", "localhost", 8000, "http://localhost:8000/health", None)
+        # ("Cooja VNC", "localhost", 5900, None, None) # Requires manual start
     ]
     
     all_passed = True

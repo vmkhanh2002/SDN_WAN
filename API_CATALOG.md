@@ -45,7 +45,7 @@ GET /health
 ```json
 {
   "status": "healthy",
-  "onos_url": "http://172.25.0.2:8181",
+  "onos_url": "http://172.28.0.2:8181",
   "data_dir": "/application/mcp-server/data",
   "agents_available": true
 }
@@ -272,7 +272,7 @@ POST /tasks/algorithm-execution
 
 ## ONOS CONTROLLER APIs (Control Plane)
 
-Base URL: `http://172.25.0.2:8181`  
+Base URL: `http://172.28.0.2:8181`  
 Authentication: Basic (onos/rocks)
 
 ### 11. Applications

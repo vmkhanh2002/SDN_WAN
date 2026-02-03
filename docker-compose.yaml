@@ -12,7 +12,7 @@ services:
       - "6653:6653"   # OpenFlow
     networks:
       sdn-network:
-        ipv4_address: 172.25.0.2
+        ipv4_address: 172.28.0.2
     environment:
       - ONOS_APPS=drivers,openflow,fwd,proxyarp
     healthcheck:
@@ -33,10 +33,10 @@ services:
     privileged: true
     networks:
       sdn-network:
-        ipv4_address: 172.25.0.3
+        ipv4_address: 172.28.0.3
     environment:
       - DISPLAY=${DISPLAY:-}
-      - CONTROLLER_IP=172.25.0.2
+      - CONTROLLER_IP=172.28.0.2
     volumes:
       - /lib/modules:/lib/modules
       - ./controller/scripts:/scripts
@@ -65,7 +65,7 @@ services:
       - "6000:6000"   # X11 forwarding
     networks:
       sdn-network:
-        ipv4_address: 172.25.0.4
+        ipv4_address: 172.28.0.4
     restart: unless-stopped
 
   # Phase 4: MCP Server + IA Agents
@@ -79,9 +79,9 @@ services:
       - "8000:8000"
     networks:
       sdn-network:
-        ipv4_address: 172.25.0.5
+        ipv4_address: 172.28.0.5
     environment:
-      - ONOS_URL=http://172.25.0.2:8181
+      - ONOS_URL=http://172.28.0.2:8181
       - ONOS_USER=onos
       - ONOS_PASSWORD=rocks
       - PYTHONUNBUFFERED=1
@@ -97,5 +97,5 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.25.0.0/24
-          gateway: 172.25.0.1
+        - subnet: 172.28.0.0/24
+          gateway: 172.28.0.1
