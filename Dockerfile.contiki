@@ -27,7 +27,7 @@ RUN pip3 install --no-cache-dir pyserial intelhex
 
 # Create workspace and copy user code
 RUN mkdir -p /workspace /simulations
-COPY contiki-workspace/* /workspace/
+COPY controller/onos-simulation/contiki-workspace/* /workspace/
 
 # Build Cooja (if needed for future GUI access)
 #WORKDIR /opt/contiki-ng/tools/cooja
@@ -38,7 +38,7 @@ ENV CONTIKI=/opt/contiki-ng
 WORKDIR /workspace
 
 # Entrypoint
-COPY scripts/cooja-entrypoint.sh /entrypoint.sh
+COPY controller/scripts/cooja-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 5900

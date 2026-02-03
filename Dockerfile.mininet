@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /scripts
 
 # Copy entrypoint
-COPY scripts/mininet-entrypoint.sh /entrypoint.sh
+COPY controller/scripts/mininet-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 WORKDIR /root

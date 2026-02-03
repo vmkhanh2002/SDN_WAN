@@ -39,7 +39,7 @@ services:
       - CONTROLLER_IP=172.25.0.2
     volumes:
       - /lib/modules:/lib/modules
-      - ./scripts:/scripts
+      - ./controller/scripts:/scripts
     command: tail -f /dev/null
     depends_on:
       onos-sdn:
@@ -56,9 +56,9 @@ services:
     environment:
       - DISPLAY=${DISPLAY:-}
     volumes:
-      - ./contiki-workspace:/root/workspace
-      - ./cooja-simulations:/root/simulations
-      - ./scripts:/scripts
+      - ./controller/onos-simulation/contiki-workspace:/root/workspace
+      - ./controller/onos-simulation/cooja-simulations:/root/simulations
+      - ./controller/scripts:/scripts
     command: tail -f /dev/null
     ports:
       - "5900:5900"   # VNC for GUI access
@@ -71,7 +71,7 @@ services:
   # Phase 4: MCP Server + IA Agents
   mcp-ia-agent:
     build:
-      context: ./app
+      context: ./application/mcp-server
       dockerfile: Dockerfile
     container_name: mcp-ia-agent
     hostname: mcp
@@ -86,7 +86,7 @@ services:
       - ONOS_PASSWORD=rocks
       - PYTHONUNBUFFERED=1
     volumes:
-      - ./app/data:/app/data
+      - ./application/mcp-server/data:/app/data
     depends_on:
       onos-sdn:
         condition: service_healthy

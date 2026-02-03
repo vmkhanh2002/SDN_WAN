@@ -1,0 +1,101 @@
+version: '3.8'
+
+services:
+  # Phase 1: ONOS SDN Controller
+  onos-sdn:
+    image: onosproject/onos:2.7.0
+    container_name: onos-sdn
+    hostname: onos
+    ports:
+      - "8181:8181"   # REST API and GUI
+      - "8101:8101"   # ONOS CLI
+      - "6653:6653"   # OpenFlow
+    networks:
+      sdn-network:
+        ipv4_address: 172.25.0.2
+    environment:
+      - ONOS_APPS=drivers,openflow,fwd,proxyarp
+    healthcheck:
+      test: ["CMD", "curl", "-u", "onos:rocks", "-f", "http://localhost:8181/onos/v1/applications"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
+
+  # Phase 1: Mininet Network Emulator  
+  mininet-sdn:
+    build:
+      context: .
+      dockerfile: Dockerfile.mininet
+    container_name: mininet-sdn
+    hostname: mininet
+    privileged: true
+    networks:
+      sdn-network:
+        ipv4_address: 172.25.0.3
+    environment:
+      - DISPLAY=${DISPLAY:-}
+      - CONTROLLER_IP=172.25.0.2
+    volumes:
+      - /lib/modules:/lib/modules
+      - ./scripts:/scripts
+    command: tail -f /dev/null
+    depends_on:
+      onos-sdn:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Phase 2: Cooja WSN Simulator
+  cooja-simulator:
+    build:
+      context: .
+      dockerfile: Dockerfile.contiki
+    container_name: cooja-simulator
+    hostname: cooja
+    environment:
+      - DISPLAY=${DISPLAY:-}
+    volumes:
+      - ./contiki-workspace:/root/workspace
+      - ./cooja-simulations:/root/simulations
+      - ./scripts:/scripts
+    command: tail -f /dev/null
+    ports:
+      - "5900:5900"   # VNC for GUI access
+      - "6000:6000"   # X11 forwarding
+    networks:
+      sdn-network:
+        ipv4_address: 172.25.0.4
+    restart: unless-stopped
+
+  # Phase 4: MCP Server + IA Agents
+  mcp-ia-agent:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: mcp-ia-agent
+    hostname: mcp
+    ports:
+      - "8000:8000"
+    networks:
+      sdn-network:
+        ipv4_address: 172.25.0.5
+    environment:
+      - ONOS_URL=http://172.25.0.2:8181
+      - ONOS_USER=onos
+      - ONOS_PASSWORD=rocks
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./app/data:/app/data
+    depends_on:
+      onos-sdn:
+        condition: service_healthy
+    restart: unless-stopped
+
+networks:
+  sdn-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/24
+          gateway: 172.25.0.1

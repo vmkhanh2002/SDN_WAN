@@ -46,7 +46,7 @@ GET /health
 {
   "status": "healthy",
   "onos_url": "http://172.25.0.2:8181",
-  "data_dir": "/app/data",
+  "data_dir": "/application/mcp-server/data",
   "agents_available": true
 }
 ```

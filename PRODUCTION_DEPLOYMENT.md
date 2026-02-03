@@ -9,14 +9,14 @@ This guide covers deploying SDN-WISE Full Stack to real hardware in production e
 ## Deployment Options
 
 ### Option 1: Simulation Mode (Current)
-- **Status:** ✅ Ready
+- **Status:** Ready
 - **Hardware:** Docker containers only
 - **Use Case:** Development, testing, demo
 - **Sensors:** Cooja simulation (Contiki-NG)
 - **Network:** Mininet emulation
 
 ### Option 2: Production Hardware
-- **Status:** 🔄 Ready for deployment
+- **Status:** Ready for deployment
 - **Hardware:** Physical sensor nodes required
 - **Use Case:** Real deployment, field testing
 - **Sensors:** Arduino Pico, ESP32 with XBee
@@ -58,7 +58,7 @@ This guide covers deploying SDN-WISE Full Stack to real hardware in production e
 
 ```bash
 # Navigate to sensor code
-cd contiki-workspace/sensor
+cd controller/onos-simulation/contiki-workspace/sensor
 
 # For Arduino Pico (example)
 make TARGET=arduino-pico sensor.hex
@@ -90,7 +90,7 @@ python cc2538-bsl.py -e -w -v sensor.bin -p /dev/ttyUSB1
 #### Flash Border Router Firmware
 
 ```bash
-cd contiki-workspace/border-router
+cd controller/onos-simulation/contiki-workspace/border-router
 
 # Compile for hardware
 make TARGET=arduino-pico border-router.hex
@@ -125,25 +125,25 @@ services:
     environment:
       - ONOS_APPS=drivers,openflow,proxyarp,mobility
     volumes:
-      - ./onos-apps/wisesdn/target/wisesdn-1.0-SNAPSHOT.oar:/root/onos/apache-karaf-4.2.14/deploy/
+      - ./controller/onos-apps/wisesdn/target/wisesdn-1.0-SNAPSHOT.oar:/root/onos/apache-karaf-4.2.14/deploy/
 
   mcp-ia-agent:
     build:
-      context: ./app
+      context: ./application/mcp-server
     container_name: mcp-ia-agent
     network_mode: "host"
     environment:
       - ONOS_URL=http://localhost:8181
       - GEMINI_API_KEY=${GEMINI_API_KEY}
     volumes:
-      - ./app/data:/app/data
+      - ./application/mcp-server/data:/app/data
 ```
 
 #### Start Production Stack
 
 ```bash
 # Build and deploy ONOS app
-cd onos-apps/wisesdn
+cd controller/onos-apps/wisesdn
 mvn clean install
 ./build-and-deploy.sh
 
@@ -342,7 +342,7 @@ Before deploying to production:
    docker exec onos-sdn ./bin/onos-user-password onos NewSecurePassword123
    
    # Add MCP authentication
-   # Update app/servers/app.py with JWT middleware
+   # Update application/mcp-server/servers/app.py with JWT middleware
    ```
 
 2. **Encryption:**
@@ -398,10 +398,10 @@ curl -u onos:rocks -X DELETE \
 docker exec onos-sdn ./bin/onos "app-export" > onos-apps.json
 
 # Backup MCP data
-tar -czf mcp-data-backup.tar.gz app/data/
+tar -czf mcp-data-backup.tar.gz application/mcp-server/data/
 
 # Backup sensor configs
-cp -r contiki-workspace/ backup/contiki-$(date +%Y%m%d)/
+cp -r controller/onos-simulation/contiki-workspace/ backup/contiki-$(date +%Y%m%d)/
 ```
 
 ### Recovery
@@ -411,10 +411,10 @@ cp -r contiki-workspace/ backup/contiki-$(date +%Y%m%d)/
 docker exec onos-sdn ./bin/onos "app-import" < onos-apps.json
 
 # Restore MCP data
-tar -xzf mcp-data-backup.tar.gz -C app/
+tar -xzf mcp-data-backup.tar.gz -C application/mcp-server/
 
 # Reflash sensors if needed
-./scripts/flash-all-sensors.sh
+./controller/scripts/flash-all-sensors.sh
 ```
 
 ---

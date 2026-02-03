@@ -2,13 +2,11 @@
 
 **Intent-Based Wireless Sensor Network Orchestration with Gemini LLM**
 
-[![Status](https://img.shields.io/badge/Status-MVP%20Complete-success)](/)
-[![Progress](https://img.shields.io/badge/Progress-80%25-blue)](/)
-[![License](https://img.shields.io/badge/License-MIT-green)](/)
+
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
 - [Architecture](#architecture)
@@ -23,7 +21,7 @@
 
 ---
 
-## 🎯 Overview
+## Overview
 
 SDN-WISE Full Stack is a **complete implementation** of an intent-based wireless sensor network (WSN) orchestration system using:
 
@@ -35,16 +33,16 @@ SDN-WISE Full Stack is a **complete implementation** of an intent-based wireless
 
 ### Key Features
 
-- ✨ **Intent-Based Control** - Natural language → Network flows
-- 🤖 **AI-Driven Orchestration** - Gemini LLM + CrewAI agents
-- 📡 **WSN Management** - Full SDN-WISE protocol implementation
-- 🏗️ **Modular Architecture** - 5 independent phases
-- 🐳 **Containerized** - Docker-based deployment
-- 📊 **REST APIs** - Complete programmatic control
+- **Intent-Based Control** - Natural language → Network flows
+- **Orchestration** - Gemini LLM + CrewAI agents
+- **WSN Management** - Full SDN-WISE protocol implementation
+- **Modular Architecture** - 5 independent phases
+- **Containerized** - Docker-based deployment
+- **REST APIs** - Complete programmatic control
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -87,7 +85,7 @@ SDN-WISE Full Stack is a **complete implementation** of an intent-based wireless
 
 ---
 
-## 🔧 Hardware Platform Support
+## Hardware Platform Support
 
 ### Sensor Nodes
 
@@ -122,7 +120,7 @@ Contiki node acting as gateway between WSN and ONOS.
 
 ---
 
-## 📊 Project Status
+## Project Status
 
 | Phase | Component | Status | Completion |
 |-------|-----------|--------|------------|
@@ -152,7 +150,7 @@ Contiki node acting as gateway between WSN and ONOS.
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ###  1. Prerequisites
 
@@ -219,7 +217,7 @@ Invoke-WebRequest -Uri "http://localhost:8000/tasks/topology-monitoring" `
 
 ---
 
-## 📦 Components
+## Components
 
 ### Phase 1: Docker Infrastructure
 
@@ -235,7 +233,7 @@ Invoke-WebRequest -Uri "http://localhost:8000/tasks/topology-monitoring" `
 
 ### Phase 2: WSN Simulation
 
-**Location:** `contiki-workspace/`
+**Location:** `controller/onos-simulation/contiki-workspace/`
 
 **Files:**
 - `sdn-wise-agent.c` (290 lines) - SDN-WISE protocol
@@ -247,7 +245,7 @@ Invoke-WebRequest -Uri "http://localhost:8000/tasks/topology-monitoring" `
 
 ### Phase 3: ONOS Application
 
-**Location:** `onos-apps/wisesdn/`
+**Location:** `controller/onos-apps/wisesdn/`
 
 **Java Classes:**
 - `AppComponent.java` - ONOS lifecycle
@@ -260,18 +258,18 @@ Invoke-WebRequest -Uri "http://localhost:8000/tasks/topology-monitoring" `
 
 **Build:**
 ```bash
-cd onos-apps/wisesdn
+cd controller/onos-apps/wisesdn
 mvn clean install
 # Generates: target/wisesdn-1.0-SNAPSHOT.oar
 ```
 
 ### Phase 4: MCP Server
 
-**Location:** `app/`
+**Location:** `application/mcp-server/`
 
 **Structure:**
 ```
-app/
+application/mcp-server/
 ├── main.py - Entry point
 ├── requirements.txt - Dependencies
 ├── servers/
@@ -291,7 +289,7 @@ app/
 
 ---
 
-## 📡 API Documentation
+## API Documentation
 
 ### MCP Server APIs (Port 8000)
 
@@ -360,19 +358,24 @@ curl -u onos:rocks -X POST \
 
 ---
 
-## 🛠️ Development
+## Development
 
 ### Project Structure
 
-```
 SDN_WAN/
-├── app/ - MCP Server (Python)
-├── contiki-workspace/ - WSN Code (C)
-├── onos-apps/ - ONOS App (Java)
-├── cooja-simulations/ - Simulation files
-├── scripts/ - Utility scripts
+├── application/             # Application Layer (L3)
+│   ├── mcp-server/          # MCP Server & IA Agents (Python)
+│   ├── ai-agents/           # Advanced Agents (Future)
+│   └── api-gateway/         # API Gateway
+├── controller/              # Controller Layer (L2)
+│   ├── onos-apps/           # ONOS SDN-WISE Applications (Java)
+│   ├── onos-simulation/     # Network Simulation
+│   │   ├── contiki-workspace/ # Sensor Firmware (C)
+│   │   └── cooja-simulations/ # WSN Topology
+│   └── scripts/             # Controller Scripts
+├── device/                  # Device Layer (L1)
 ├── docker-compose.yaml
-├── Dockerfile.* - Container images
+├── Dockerfile.*
 └── README.md
 ```
 
@@ -394,7 +397,7 @@ SDN_WAN/
 
 ---
 
-## 🧪 Testing
+## Testing
 
 ### Automated Tests
 
@@ -407,7 +410,7 @@ docker ps
 docker network inspect sdn-network
 
 # WSN code compilation (optional)
-cd contiki-workspace
+cd controller/onos-simulation/contiki-workspace
 make TARGET=cooja
 ```
 
@@ -431,13 +434,13 @@ See `PHASE5_TESTING.md` (to be created)
 
 ---
 
-## 🚢 Deployment
+## Deployment
 
 ### Development (Current)
 
 ```bash
 # Start MCP server
-cd app && python main.py
+cd application/mcp-server && python main.py
 
 # Access API docs
 open http://localhost:8000/docs
@@ -447,7 +450,7 @@ open http://localhost:8000/docs
 
 ```bash
 # Build ONOS app
-cd onos-apps/wisesdn
+cd controller/onos-apps/wisesdn
 ./build-and-deploy.sh
 
 # Deploy to ONOS
@@ -469,7 +472,7 @@ docker-compose down
 
 ---
 
-## 📚 Documentation
+## Documentation
 
 - **[Implementation Plan](brain/implementation_plan.md)** - 5-phase roadmap
 - **[Task List](brain/task.md)** - Detailed checklist
@@ -479,7 +482,7 @@ docker-compose down
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 This is a laboratory/educational project. Contributions welcome!
 
@@ -493,13 +496,13 @@ This is a laboratory/educational project. Contributions welcome!
 
 ---
 
-## 📝 License
+## License
 
 MIT License - See LICENSE file
 
 ---
 
-## 👥 Authors
+## Authors
 
 - **Original Concept:** SDN-WISE Protocol
 - **MCP Architecture:** Adapted from ehr-aiot
@@ -507,7 +510,7 @@ MIT License - See LICENSE file
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - ONOS Project
 - Contiki-NG Community
@@ -517,7 +520,7 @@ MIT License - See LICENSE file
 
 ---
 
-## 📚 References
+## References
 
 ### Official Repositories
 
@@ -535,7 +538,7 @@ MIT License - See LICENSE file
 
 ---
 
-## 👥 Credits
+## Credits
 
 ### Implementation
 
@@ -555,7 +558,7 @@ MIT License - See LICENSE file
 
 ---
 
-## 📞 Support
+## Support
 
 For questions or issues:
 - Open an issue on GitHub
