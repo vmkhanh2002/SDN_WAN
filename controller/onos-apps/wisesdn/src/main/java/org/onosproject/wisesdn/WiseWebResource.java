@@ -199,4 +199,89 @@ public class WiseWebResource extends AbstractWebResource {
                     .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
         }
     }
+
+    /**
+     * Set patient consent (Compliance)
+     * POST /onos/wisesdn/api/policy/consent
+     */
+    @POST
+    @Path("api/policy/consent")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response setConsent(String json) {
+        try {
+            ObjectNode root = (ObjectNode) mapper.readTree(json);
+            int nodeId = root.get("nodeId").asInt();
+            boolean consent = root.get("consent").asBoolean();
+
+            AppComponent app = get(AppComponent.class);
+            app.getController().setPatientConsent(nodeId, consent);
+
+            ObjectNode result = mapper.createObjectNode();
+            result.put("status", "success");
+            result.put("message", "Consent updated");
+            result.put("nodeId", nodeId);
+            result.put("consent", consent);
+
+            return Response.ok(result.toString()).build();
+        } catch (Exception e) {
+            log.error("Error setting consent", e);
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}")
+                    .build();
+        }
+    }
+
+    /**
+     * Get patient consent status
+     * GET /onos/wisesdn/api/policy/consent/{nodeId}
+     */
+    @GET
+    @Path("api/policy/consent/{nodeId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getConsent(@PathParam("nodeId") int nodeId) {
+        try {
+            AppComponent app = get(AppComponent.class);
+            boolean consent = app.getController().getPatientConsent(nodeId);
+
+            ObjectNode result = mapper.createObjectNode();
+            result.put("nodeId", nodeId);
+            result.put("consent", consent);
+
+            return Response.ok(result.toString()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        }
+    }
+
+    /**
+     * Register device identity
+     * POST /onos/wisesdn/api/policy/register
+     */
+    @POST
+    @Path("api/policy/register")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response registerDevice(String json) {
+        try {
+            ObjectNode root = (ObjectNode) mapper.readTree(json);
+            int nodeId = root.get("nodeId").asInt();
+            String identity = root.get("identity").asText();
+
+            AppComponent app = get(AppComponent.class);
+            app.getController().registerDevice(nodeId, identity);
+
+            ObjectNode result = mapper.createObjectNode();
+            result.put("status", "success");
+            result.put("message", "Device registered");
+            result.put("nodeId", nodeId);
+            result.put("identity", identity);
+
+            return Response.ok(result.toString()).build();
+        } catch (Exception e) {
+            log.error("Error registering device", e);
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"" + e.getMessage() + "\"}")
+                    .build();
+        }
+    }
 }

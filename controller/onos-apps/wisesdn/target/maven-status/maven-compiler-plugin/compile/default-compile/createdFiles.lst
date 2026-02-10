@@ -1,0 +1,12 @@
+org/onosproject/wisesdn/FlowTableManager$FlowInstallStatus.class
+org/onosproject/wisesdn/WiseWebApplication.class
+org/onosproject/wisesdn/TopologyManager$WiseNode.class
+org/onosproject/wisesdn/WiseController.class
+org/onosproject/wisesdn/WiseController$NodeStats.class
+org/onosproject/wisesdn/TopologyManager.class
+org/onosproject/wisesdn/FlowRule.class
+org/onosproject/wisesdn/WiseWebResource.class
+org/onosproject/wisesdn/AppComponent$WisePacketProcessor.class
+org/onosproject/wisesdn/FlowTableManager.class
+org/onosproject/wisesdn/AppComponent.class
+org/onosproject/wisesdn/WisePacket.class

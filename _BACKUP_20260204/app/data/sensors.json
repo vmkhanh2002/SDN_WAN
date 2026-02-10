@@ -1,5 +1,0 @@
-[
-  {"device_id": "lamp_1", "type": "lamp", "status": "ok", "battery": 80},
-  {"device_id": "door_1", "type": "door", "status": "degraded", "battery": 50},
-  {"device_id": "thermo_1", "type": "thermostat", "status": "ok", "battery": 5}
-]

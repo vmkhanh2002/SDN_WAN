@@ -1,7 +1,0 @@
-[
-  {"device_id": "lamp_1", "action": "turn_on"},
-  {"device_id": "door_1", "action": "open"},
-  {"device_id": "thermo_1", "action": "set_temperature"},
-  {"device_id": "lamp_2", "action": "turn_on"},
-  {"device_id": "lamp_1", "action": "open"}
-]

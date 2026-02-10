@@ -36,7 +36,7 @@ services:
         ipv4_address: 172.28.0.3
     environment:
       - DISPLAY=${DISPLAY:-}
-      - CONTROLLER_IP=172.28.0.2
+      - ONOS_IP=172.28.0.2
     volumes:
       - /lib/modules:/lib/modules
       - ./controller/scripts:/scripts

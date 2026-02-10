@@ -21,6 +21,14 @@ public class WiseController {
     // Statistics
     private final Map<Integer, NodeStats> nodeStats = new ConcurrentHashMap<>();
 
+    // Security & Compliance
+    private final Map<Integer, Boolean> patientConsentMap = new ConcurrentHashMap<>();
+    private final Map<Integer, String> deviceIdentityMap = new ConcurrentHashMap<>();
+
+    // Policy Constants
+    public static final String ACTION_FORWARD = "FORWARD";
+    public static final String ACTION_ACCESS_DATA = "ACCESS_DATA";
+
     public WiseController(FlowTableManager flowManager, TopologyManager topologyManager) {
         this.flowManager = flowManager;
         this.topologyManager = topologyManager;
@@ -71,6 +79,13 @@ public class WiseController {
         log.debug("Data packet from node {}: {} bytes",
                 String.format("0x%04X", packet.getSrc()),
                 packet.getPayload() != null ? packet.getPayload().length : 0);
+
+        // Enforce Policy: Check Consent
+        if (!checkPolicy(packet.getSrc(), ACTION_FORWARD)) {
+            log.warn("Dropping packet from node {} due to policy violation (No Consent)",
+                    String.format("0x%04X", packet.getSrc()));
+            return;
+        }
 
         // Check if there's a flow rule for this packet
         FlowRule rule = flowManager.getMatchingFlow(packet.getSrc(), packet.getDst());
@@ -190,10 +205,48 @@ public class WiseController {
         public int packetsSent;
         public int packetsReceived;
 
-        @Override
         public String toString() {
             return String.format("NodeStats{battery=%d%%, sent=%d, recv=%d, lastSeen=%d}",
                     batteryLevel, packetsSent, packetsReceived, lastSeen);
         }
+    }
+
+    /**
+     * Set patient consent for a specific node (Compliance)
+     */
+    public void setPatientConsent(int nodeId, boolean hasConsent) {
+        patientConsentMap.put(nodeId, hasConsent);
+        log.info("Updated consent for node {}: {}", String.format("0x%04X", nodeId), hasConsent);
+    }
+
+    /**
+     * Get patient consent status
+     */
+    public boolean getPatientConsent(int nodeId) {
+        return patientConsentMap.getOrDefault(nodeId, false); // Default to FALSE (Deny)
+    }
+
+    /**
+     * Check compliance policy
+     */
+    public boolean checkPolicy(int nodeId, String action) {
+        if (ACTION_ACCESS_DATA.equals(action) || ACTION_FORWARD.equals(action)) {
+            // Require consent for data access/forwarding
+            boolean consent = getPatientConsent(nodeId);
+            if (!consent) {
+                log.warn("POLICY VIOLATION: Node {} attempted {} without patient consent",
+                        String.format("0x%04X", nodeId), action);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Register device identity
+     */
+    public void registerDevice(int nodeId, String identity) {
+        deviceIdentityMap.put(nodeId, identity);
+        log.info("Registered device identity: {} -> {}", String.format("0x%04X", nodeId), identity);
     }
 }
