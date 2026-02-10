@@ -7,7 +7,7 @@ Write-Host "============================================" -ForegroundColor Cyan
 Write-Host ""
 
 $MCP_BASE = "http://localhost:8000"
-$ONOS_BASE = "http://172.25.0.2:8181"
+$ONOS_BASE = "http://localhost:8181"
 $ONOS_AUTH = @{
     Username = 'onos'
     Password = 'rocks'
@@ -36,8 +36,14 @@ function Test-Endpoint {
         $params = @{
             Uri = $Url
             Method = $Method
-            ContentType = "application/json"
             TimeoutSec = 10
+            Headers = @{ 
+                "Accept" = "application/json"
+            }
+        }
+
+        if ($Method -in @("POST", "PUT")) {
+            $params.Headers["Content-Type"] = "application/json"
         }
         
         if ($Auth) {
@@ -67,6 +73,12 @@ function Test-Endpoint {
     }
     catch {
         Write-Host "    [FAIL] Error: $($_.Exception.Message)" -ForegroundColor Red
+        if ($_.Exception.Response) {
+             # Try to read error details from response stream
+             $reader = New-Object System.IO.StreamReader($_.Exception.Response.GetResponseStream())
+             $errBody = $reader.ReadToEnd()
+             Write-Host "    Server Response: $errBody" -ForegroundColor Red
+        }
         Write-Host ""
         
         $script:testResults += @{
@@ -79,7 +91,7 @@ function Test-Endpoint {
     }
 }
 
-Write-Host "=== MCP SERVER APIs (Total: 9 endpoints) ===" -ForegroundColor Magenta
+Write-Host "=== MCP SERVER APIs (Total: 10 endpoints) ===" -ForegroundColor Magenta
 Write-Host ""
 
 # 1. Root endpoint
@@ -106,7 +118,7 @@ Test-Endpoint `
     -Name "Device Orchestration" `
     -Url "$MCP_BASE/tasks/device-orchestration" `
     -Method "POST" `
-    -Body '{"action":"status"}' `
+    -Body '{"action":"list_plans"}' `
     -Description "Translate user intent into device execution plans"
 
 # 5. Deployment Monitoring
@@ -122,7 +134,7 @@ Test-Endpoint `
     -Name "Network Configuration" `
     -Url "$MCP_BASE/tasks/network-configuration" `
     -Method "POST" `
-    -Body '{"action":"status"}' `
+    -Body '{"action":"ota_status"}' `
     -Description "Configure network settings and manage OTA firmware updates"
 
 # 7. Plan Validation
@@ -130,7 +142,7 @@ Test-Endpoint `
     -Name "Plan Validation" `
     -Url "$MCP_BASE/tasks/plan-validation" `
     -Method "POST" `
-    -Body '{"action":"validate"}' `
+    -Body '{"action":"validate","plan":{"plan_id":"test-plan","devices":[]},"user_context":{"user_id":"test-user"}}' `
     -Description "Validate plans against security, energy, and location constraints"
 
 # 8. Plan Execution
@@ -138,15 +150,23 @@ Test-Endpoint `
     -Name "Plan Execution" `
     -Url "$MCP_BASE/tasks/plan-execution" `
     -Method "POST" `
-    -Body '{"action":"status"}' `
+    -Body '{"action":"get_history"}' `
     -Description "Execute orchestration plans by translating to device commands"
 
-# 9. Access Control
+# 9. Flow Execution (New)
+Test-Endpoint `
+    -Name "Flow Execution" `
+    -Url "$MCP_BASE/tasks/flow-execution" `
+    -Method "POST" `
+    -Body '{"action":"get_history"}' `
+    -Description "Manage SDN flow rules via ONOS"
+
+# 10. Access Control
 Test-Endpoint `
     -Name "Access Control" `
     -Url "$MCP_BASE/tasks/access-control" `
     -Method "POST" `
-    -Body '{"action":"check"}' `
+    -Body '{"op":"grant","role":"admin","permission":"read"}' `
     -Description "Manage user permissions, roles, and credentials"
 
 # 10. Algorithm Execution
@@ -154,7 +174,7 @@ Test-Endpoint `
     -Name "Algorithm Execution" `
     -Url "$MCP_BASE/tasks/algorithm-execution" `
     -Method "POST" `
-    -Body '{"action":"status"}' `
+    -Body '{"action":"options"}' `
     -Description "Execute custom algorithms and data processing tasks"
 
 Write-Host ""

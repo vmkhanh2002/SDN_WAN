@@ -1,0 +1,10 @@
+{
+  "policies": [
+    {
+      "role": "admin",
+      "allow": [
+        "read"
+      ]
+    }
+  ]
+}

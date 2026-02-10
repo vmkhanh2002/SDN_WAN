@@ -75,4 +75,8 @@ app.include_router(execution_router, prefix="/tasks")
 app.include_router(access_router, prefix="/tasks")
 app.include_router(algorithm_router, prefix="/tasks")
 
+# Explicitly import and include flow_execution router with a unique alias to avoid conflict
+from .tasks.flow_execution import execution_router as flow_router
+app.include_router(flow_router, prefix="/tasks")
+
 from .utils import read_json, write_json
